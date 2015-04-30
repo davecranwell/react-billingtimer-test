@@ -46,36 +46,14 @@ function update(id, updates) {
 }
 
 /**
- * Update all of the TODO items with the same object.
- *     the data to be updated.  Used to mark all TODOs as completed.
- * @param  {object} updates An object literal containing only the data to be
- *     updated.
-
- */
-function updateAll(updates) {
-  for (var id in _tasks) {
-    update(id, updates);
-  }
-}
-
-/**
  * Delete a TODO item.
  * @param  {string} id
  */
 function destroy(id) {
+  console.log('here');
   delete _tasks[id];
 }
 
-/**
- * Delete all the completed TODO items.
- */
-function destroyCompleted() {
-  for (var id in _tasks) {
-    if (_tasks[id].complete) {
-      destroy(id);
-    }
-  }
-}
 
 var AppStore = assign({}, EventEmitter.prototype, {
 
@@ -119,6 +97,10 @@ AppDispatcher.register(function(action) {
       }
       break;
 
+    case AppConstants.TASK_START:
+      AppStore.emitChange();
+      break;
+
     case AppConstants.TASK_UPDATE_TEXT:
       text = action.text.trim();
       if (text !== '') {
@@ -128,6 +110,7 @@ AppDispatcher.register(function(action) {
       break;
 
     case AppConstants.TASK_DESTROY:
+      console.log(action.id);
       destroy(action.id);
       AppStore.emitChange();
       break;
