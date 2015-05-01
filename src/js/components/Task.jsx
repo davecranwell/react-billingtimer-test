@@ -9,27 +9,33 @@ var Task = React.createClass({
             name: "New task",
             elapsed: 0,
             running: 0,
-            start: null,
-            timer: null
+            start: null
         }
     },
 
     componentDidMount: function() {
+        //AppStore.addTaskStartListener(this._startEventHandler);
+
         this.start();
-        AppStore.addChangeListener(this._changeHandler);
     },
 
     componentWillUnmount: function() {
-        AppStore.removeChangeListener(this._changeHandler);
+        //AppStore.removeTaskStartListener(this._startEventHandler);
     },
 
-    _changeHandler: function(e){
-        this.stop();
-    },
+    // _startEventHandler: function(id){
+    //     console.log('started task', id);
+    //     console.log('i am task', this.props.task.id);
 
-    tick: function(){
-        this.setState({elapsed: new Date() - this.state.start});
-    },
+    //     // ignore start events from self
+    //     if(id != this.props.task.id){
+    //         this.stop();
+    //     }
+    // },
+
+    // tick: function(){
+    //     this.setState({elapsed: new Date() - this.state.start});
+    // },
 
     toggle: function(e){
         if(this.state.running){
@@ -42,31 +48,37 @@ var Task = React.createClass({
     start: function(){
         var alreadyElapsed = this.state.elapsed;
 
-        this.setState({
-            running: 1, 
-            start: new Date() - alreadyElapsed,
-            timer: setInterval(this.tick, 100)
-        });
+        this.setState({running: 1});
+
+        AppActions.start(this.props.task.id);
+
+        this.props.onStart(this.props.task.id);
+
+        //console.log('starting task', this.props.task.id)
     },
 
     stop: function(){
-        clearInterval(this.state.timer);
+        // clearInterval(this.state.timer);
         this.setState({running: 0, timer: null});
+
+
+        // console.log('trying to stop', this.props.task.id);
+        //AppActions.stop(this.props.task.id, this.state.elapsed);
     },
 
-    delete: function(){
+    destroy: function(){
         this.stop();
-        console.log(this.props.task);
-        AppActions.destroy(this.props.task.id);
+        //AppActions.destroy(this.props.task.id);
     },
 
     updateName: function(e){
         var newText = event.target.value.replace(/^\s+|\s+$/g, '')
 
         if(newText.length){
-            console.log('new text', newText);
-            this.setState({name: event.target.value});
+            this.setState({name: newText});
         }
+
+        //AppActions.updateName(this.props.task.id, newText);
     },
 
     render: function() {
@@ -74,11 +86,12 @@ var Task = React.createClass({
             <div>
                 <TextInput onSave={this.updateName} />
                 <div onClick={this.toggle}>
+                    <div>id: {this.props.task.id}</div>
                     <div>name: {this.state.name}</div>
                     <div>elapsed: {this.state.elapsed}</div>
                     <div>running: {this.state.running}</div>
                 </div>
-                <button onClick={this.delete}>Delete</button>
+                <button onClick={this.destroy}>Delete</button>
             </div>
         )
     }

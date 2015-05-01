@@ -15,6 +15,7 @@ var AppConstants = require('../constants/AppConstants');
 var assign = require('object-assign');
 
 var CHANGE_EVENT = 'change';
+var START_EVENT = 'start';
 
 var _tasks = {};
 
@@ -23,16 +24,16 @@ var _tasks = {};
  * @param  {string} text The content of the TODO
  */
 function create(text) {
-  // Hand waving here -- not showing how this interacts with XHR or persistent
-  // server-side storage.
-  // Using the current timestamp + random number in place of a real id.
-  var id = (+new Date() + Math.floor(Math.random() * 999999)).toString(36);
-  _tasks[id] = {
-    id: id,
-    elapsed: 0,
-    running: 0,
-    text: text
-  };
+    // Hand waving here -- not showing how this interacts with XHR or persistent
+    // server-side storage.
+    // Using the current timestamp + random number in place of a real id.
+    var id = (+new Date() + Math.floor(Math.random() * 999999)).toString(36);
+    _tasks[id] = {
+        id: id,
+        running: 0,
+        elapsed: 0,
+        text: text
+    };
 }
 
 /**
@@ -42,7 +43,7 @@ function create(text) {
  *     updated.
  */
 function update(id, updates) {
-  _tasks[id] = assign({}, _tasks[id], updates);
+    _tasks[id] = assign({}, _tasks[id], updates);
 }
 
 /**
@@ -50,74 +51,102 @@ function update(id, updates) {
  * @param  {string} id
  */
 function destroy(id) {
-  console.log('here');
-  delete _tasks[id];
+    delete _tasks[id];
 }
 
 
 var AppStore = assign({}, EventEmitter.prototype, {
 
-  /**
-   * Get the entire collection of Tasks.
-   * @return {object}
-   */
-  getAllTasks: function() {
-    return _tasks;
-  },
+    /**
+     * Get the entire collection of Tasks.
+     * @return {object}
+     */
+    getAllTasks: function() {
+        return _tasks;
+    },
 
-  emitChange: function() {
-    this.emit(CHANGE_EVENT);
-  },
+    emitTaskChange: function() {
+        this.emit(CHANGE_EVENT);
+    },
 
-  /**
-   * @param {function} callback
-   */
-  addChangeListener: function(callback) {
-    this.on(CHANGE_EVENT, callback);
-  },
+    emitTaskStart: function(id) {
+        this.emit(START_EVENT, id);
+    },
 
-  /**
-   * @param {function} callback
-   */
-  removeChangeListener: function(callback) {
-    this.removeListener(CHANGE_EVENT, callback);
-  }
+    /**
+     * @param {function} callback
+     */
+    addTaskChangeListener: function(callback) {
+        this.on(CHANGE_EVENT, callback);
+    },
+
+    /**
+     * @param {function} callback
+     */
+    removeTaskChangeListener: function(callback) {
+        this.removeListener(CHANGE_EVENT, callback);
+    },
+
+    /**
+     * @param {function} callback
+     */
+    addTaskStartListener: function(callback) {
+        this.on(START_EVENT, callback);
+    },
+
+    /**
+     * @param {function} callback
+     */
+    removeTaskStartListener: function(callback) {
+        this.removeListener(START_EVENT, callback);
+    }
 });
 
 // Register callback to handle all updates
 AppDispatcher.register(function(action) {
-  var text;
+    var text;
 
-  switch(action.actionType) {
-    case AppConstants.TASK_CREATE:
-      text = action.text.trim();
-      if (text !== '') {
-        create(text);
-        AppStore.emitChange();
-      }
-      break;
+    switch(action.actionType) {
+        case AppConstants.TASK_CREATE:
+            text = action.text.trim();
 
-    case AppConstants.TASK_START:
-      AppStore.emitChange();
-      break;
+            if (text !== '') {
+                create(text);
+                AppStore.emitTaskChange();
+            }
 
-    case AppConstants.TASK_UPDATE_TEXT:
-      text = action.text.trim();
-      if (text !== '') {
-        update(action.id, {text: text});
-        AppStore.emitChange();
-      }
-      break;
+            break;
 
-    case AppConstants.TASK_DESTROY:
-      console.log(action.id);
-      destroy(action.id);
-      AppStore.emitChange();
-      break;
+        case AppConstants.TASK_START:
+            AppStore.emitTaskStart(action.id);
+            update(action.id, {running: 1});
 
-    default:
-      // no op
-  }
+            break;
+
+        case AppConstants.TASK_STOP:
+            update(action.id, {elapsed: action.elapsed, running: 0});
+            AppStore.emitTaskChange();
+            break;
+
+        case AppConstants.TASK_UPDATE_NAME:
+            text = action.text.trim();
+
+            if (text !== '') {
+                update(action.id, {text: text});
+                AppStore.emitTaskChange();
+            }
+
+            break;
+
+        case AppConstants.TASK_DESTROY:
+            destroy(action.id);
+            AppStore.emitTaskChange();
+
+            break;
+
+        default:
+            // no op
+    }
 });
 
 module.exports = AppStore;

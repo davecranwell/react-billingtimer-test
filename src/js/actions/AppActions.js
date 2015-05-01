@@ -14,37 +14,58 @@ var AppConstants = require('../constants/AppConstants');
 
 var AppActions = {
 
-  /**
-   * @param  {string} text
-   */
-  create: function(text) {
-    AppDispatcher.dispatch({
-      actionType: AppConstants.TASK_CREATE,
-      text: text
-    });
-  },
+    /**
+     * @param  {string} text
+     */
+    create: function(text) {
+        AppDispatcher.dispatch({
+            actionType: AppConstants.TASK_CREATE,
+            text: text
+        });
+    },
 
-  /**
-   * @param  {string} id The ID of the ToDo item
-   * @param  {string} text
-   */
-  updateText: function(id, text) {
-    AppDispatcher.dispatch({
-      actionType: AppConstants.TASK_UPDATE_TEXT,
-      id: id,
-      text: text
-    });
-  },
+    /**
+     * @param  {string} id
+     */
+    start: function(id) {
+        AppDispatcher.dispatch({
+            actionType: AppConstants.TASK_START,
+            id: id
+        });
+    },
 
-  /**
-   * @param  {string} id
-   */
-  destroy: function(id) {
-    AppDispatcher.dispatch({
-      actionType: AppConstants.TASK_DESTROY,
-      id: id
-    });
-  }
+    /**
+     * @param  {string} id
+     */
+    stop: function(id, elapsed) {
+        AppDispatcher.dispatch({
+            actionType: AppConstants.TASK_STOP,
+            id: id,
+            elapsed: elapsed
+        });
+    },
+
+    /**
+     * @param  {string} id The ID of the ToDo item
+     * @param  {string} text
+     */
+    updateName: function(id, text) {
+        AppDispatcher.dispatch({
+            actionType: AppConstants.TASK_UPDATE_TEXT,
+            id: id,
+            text: text
+        });
+    },
+
+    /**
+     * @param  {string} id
+     */
+    destroy: function(id) {
+        AppDispatcher.dispatch({
+            actionType: AppConstants.TASK_DESTROY,
+            id: id
+        });
+    }
 };
 
 module.exports = AppActions;
