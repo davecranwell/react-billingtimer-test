@@ -18,6 +18,9 @@ var CHANGE_EVENT = 'change';
 var START_EVENT = 'start';
 
 var _tasks = {};
+var _timerStart = null;
+
+
 
 /**
  * Create a Task item (blank)
@@ -72,6 +75,16 @@ function start(id){
 
 
 var AppStore = assign({}, EventEmitter.prototype, {
+
+    isTimerActive: function(){
+        for (var key in _tasks) {
+            if(_tasks[key].running){
+                return true;
+            }
+        }
+
+        return null;
+    },
 
     /**
      * Get the entire collection of Tasks.

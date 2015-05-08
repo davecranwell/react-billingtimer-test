@@ -20,12 +20,12 @@ var Tasklist = React.createClass({
         var tasks = [];
 
         for (var task in allTasks) {
-            tasks.push(<Task key={task} onToggle={this.handlTaskToggle.bind(this, task)} task={allTasks[task]} />);
+            tasks.push(<li><Task key={task} onToggle={this.handlTaskToggle.bind(this, task)} task={allTasks[task]} /></li>);
         }
 
         return (
             <ul>
-                <li>{tasks}</li>
+                {tasks}
             </ul>
         )
     }

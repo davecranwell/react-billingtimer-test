@@ -6,9 +6,7 @@ var AppActions = require('../actions/AppActions.js');
 
 function getAppState() {
     return {
-        currentTaskTimer: null,
-        currentTaskStart: null,
-        currentTaskElapsed: 0,
+        isTimerActive: AppStore.isTimerActive(),
         allTasks: AppStore.getAllTasks()
     };
 }
@@ -27,6 +25,7 @@ var App = React.createClass({
     },
 
     onAppChange: function(){
+        console.log(getAppState());
         this.setState(getAppState());
     },
 
@@ -38,7 +37,7 @@ var App = React.createClass({
         return (
             <div>
                 <Tasklist allTasks={this.state.allTasks} />
-                <Timer onClick={this.handleTimerClick} />
+                <Timer onClick={this.handleTimerClick} active={this.state.isTimerActive} />
             </div>
         )
     }
