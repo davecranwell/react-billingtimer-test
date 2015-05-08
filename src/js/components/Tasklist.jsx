@@ -3,9 +3,12 @@ var Task = require('./Task.jsx');
 var AppActions = require('../actions/AppActions.js');
 
 var Tasklist = React.createClass({
-    start: function(taskState){
-        console.log('STARTING!')
-        AppActions.start(taskState.id);
+    handlTaskToggle: function(task){
+        if(task.running){
+            AppActions.stop(task);
+        }else{
+            AppActions.start(task);
+        }
     },
 
     render: function() {
@@ -16,8 +19,8 @@ var Tasklist = React.createClass({
         var allTasks = this.props.allTasks;
         var tasks = [];
 
-        for (var key in allTasks) {
-            tasks.push(<Task key={key} task={allTasks[key]} onStart={this.start} />);
+        for (var task in allTasks) {
+            tasks.push(<Task key={task} onToggle={this.handlTaskToggle.bind(this, task)} task={allTasks[task]} />);
         }
 
         return (

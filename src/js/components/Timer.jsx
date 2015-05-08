@@ -6,14 +6,6 @@ var Stopwatch = React.createClass({
         return { elapsed: 0 };
     },
 
-    tick: function(){
-        this.setState({elapsed: new Date() - this.props.start});
-    },
-
-    handleClick: function(e){
-        AppActions.create('New task');
-    },
-
     render: function() {
         var elapsed = Math.round(this.state.elapsed / 100);
 
@@ -22,7 +14,7 @@ var Stopwatch = React.createClass({
 
         return (
             <div class="timer-wrapper">
-                <button onClick={this.handleClick}>{seconds}</button>
+                <button onClick={this.props.onClick}>{seconds}</button>
             </div>
         )
     }

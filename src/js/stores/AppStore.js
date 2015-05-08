@@ -23,14 +23,25 @@ var _tasks = {};
  * Create a Task item (blank)
  * @param  {string} text The content of the TODO
  */
+
+function stopAll(){
+    // Stop any currently running task
+    for (var key in _tasks) {
+        _tasks[key] = assign({}, _tasks[key], {running:0});
+    };
+}
+
 function create(text) {
     // Hand waving here -- not showing how this interacts with XHR or persistent
     // server-side storage.
     // Using the current timestamp + random number in place of a real id.
+    stopAll();
+
+    // Create new task
     var id = (+new Date() + Math.floor(Math.random() * 999999)).toString(36);
     _tasks[id] = {
         id: id,
-        running: 0,
+        running: 1,
         elapsed: 0,
         text: text
     };
@@ -52,6 +63,11 @@ function update(id, updates) {
  */
 function destroy(id) {
     delete _tasks[id];
+}
+
+function start(id){
+    stopAll();
+    update(id, {running:1});
 }
 
 
@@ -118,18 +134,19 @@ AppDispatcher.register(function(action) {
             break;
 
         case AppConstants.TASK_START:
-            AppStore.emitTaskStart(action.id);
-            update(action.id, {running: 1});
+            start(action.id);
+            AppStore.emitTaskChange();
 
             break;
 
         case AppConstants.TASK_STOP:
             update(action.id, {elapsed: action.elapsed, running: 0});
             AppStore.emitTaskChange();
+
             break;
 
-        case AppConstants.TASK_UPDATE_NAME:
-            text = action.text.trim();
+        case AppConstants.TASK_UPDATE_TEXT:
+            text = action.text.replace(/^\s+|\s+$/g, '').trim();
 
             if (text !== '') {
                 update(action.id, {text: text});

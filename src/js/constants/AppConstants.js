@@ -16,5 +16,5 @@ module.exports = keyMirror({
     TASK_START: null,
     TASK_STOP: null,
     TASK_DESTROY: null,
-    TASK_UPDATE_NAME: null
+    TASK_UPDATE_TEXT: null
 });

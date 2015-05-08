@@ -19,41 +19,26 @@ var App = React.createClass({
     },
 
     componentDidMount: function() {
-        AppStore.addTaskChangeListener(this._onChange);
-        AppStore.addTaskStartListener(this._onStart);
+        AppStore.addTaskChangeListener(this.onAppChange);
     },
 
     componentWillUnmount: function() {
-        AppStore.removeTaskChangeListener(this._onChange);
+        AppStore.removeTaskChangeListener(this.onAppChange);
     },
 
-    tick: function(){
-        this.setState({currentTaskElapsed: new Date() - this.state.currentTaskStart});
-    },
-
-    _onStart: function(newId){
-        var allTasks = this.state.allTasks;
-
-        for (var key in allTasks) {
-            if(allTasks[key].running && allTasks[key].id != newId){
-                clearInterval(this.state.currentTaskTimer);
-                this.setState({currentTaskTimer: null});
-
-                AppActions.stop(allTasks[key].id, this.state.currentTaskElapsed);
-            }
-        }
-        this.setState({currentTaskTimer: setInterval(this.tick, 100)})
-    },
-
-    _onChange: function(){
+    onAppChange: function(){
         this.setState(getAppState());
+    },
+
+    handleTimerClick: function(e){
+        AppActions.create('New task');
     },
 
     render: function() {
         return (
             <div>
                 <Tasklist allTasks={this.state.allTasks} />
-                <Timer />
+                <Timer onClick={this.handleTimerClick} />
             </div>
         )
     }

@@ -37,11 +37,10 @@ var AppActions = {
     /**
      * @param  {string} id
      */
-    stop: function(id, elapsed) {
+    stop: function(id) {
         AppDispatcher.dispatch({
             actionType: AppConstants.TASK_STOP,
-            id: id,
-            elapsed: elapsed
+            id: id
         });
     },
 
