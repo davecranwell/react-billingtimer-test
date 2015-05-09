@@ -33,12 +33,16 @@ var Stopwatch = React.createClass({
         }, 1000);
     },
 
+    onToggle: function(){
+        this.props.onToggle(this.state.elapsed);
+    },
+
     render: function() {
         var time = SecondsTohhmmss(this.state.elapsed);
 
         return (
             <div class="timer-wrapper">
-                <button onClick={this.props.onClick}>{time}</button>
+                <button onClick={this.onToggle}>{time}</button>
             </div>
         )
     }

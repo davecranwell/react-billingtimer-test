@@ -76,6 +76,16 @@ function start(id){
 
 var AppStore = assign({}, EventEmitter.prototype, {
 
+    getActiveTask: function(){
+        for (var key in _tasks) {
+            if(_tasks[key].running){
+                return _tasks[key];
+            }
+        }
+
+        return null;
+    },
+
     isTimerActive: function(){
         for (var key in _tasks) {
             if(_tasks[key].running){
@@ -153,6 +163,7 @@ AppDispatcher.register(function(action) {
             break;
 
         case AppConstants.TASK_STOP:
+            console.log('hereeeee', action);
             update(action.id, {elapsed: action.elapsed, running: 0});
             AppStore.emitTaskChange();
 
