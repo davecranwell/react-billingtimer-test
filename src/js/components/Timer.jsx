@@ -1,19 +1,16 @@
 var React = require('react');
-var SecondsTohhmmss = require('./SecondsTohhmmss');
+var ReactDOM = require('react-dom');
+var SecondsTohhmmss = require('../lib/SecondsTohhmmss');
 
 var Stopwatch = React.createClass({
     getInitialState: function(){
         return { 
-            elapsed: 0 
+            elapsed: 0
         };
     },
 
     componentDidMount: function() {
         this._tick();
-    },
-
-    componentDidUpdate: function(){
-        console.log('updated');
     },
 
     componentWillUnmount: function() {
@@ -41,7 +38,7 @@ var Stopwatch = React.createClass({
         var time = SecondsTohhmmss(this.state.elapsed);
 
         return (
-            <div class="timer-wrapper">
+            <div className="timer-wrapper">
                 <button onClick={this.onToggle}>{time}</button>
             </div>
         )

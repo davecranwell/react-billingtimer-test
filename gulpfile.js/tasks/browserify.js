@@ -21,18 +21,17 @@ var browserifyTask = function(devMode) {
 
   var browserifyThis = function(bundleConfig) {
 
+    console.log(devMode);
+
     if(devMode) {
       // Add watchify args and debug (sourcemaps) option
       _.extend(bundleConfig, watchify.args, { debug: true });
-      // A watchify require/external bug that prevents proper recompiling,
-      // so (for now) we'll ignore these options during development. Running
-      // `gulp browserify` directly will properly require and externalize.
-      bundleConfig = _.omit(bundleConfig, ['external', 'require']);
     }
 
     var b = browserify(bundleConfig);
 
     var bundle = function() {
+      console.log(bundleConfig);
       return b
         .bundle()
         // Report compile errors
@@ -51,6 +50,9 @@ var browserifyTask = function(devMode) {
       // Rebundle on update
       b.on('update', bundle);
     } else {
+
+      b.plugin('minifyify', {map: false, uglify: true});
+
       // Sort out shared dependencies.
       // b.require exposes modules externally
       if(bundleConfig.require) b.require(bundleConfig.require);
@@ -67,7 +69,7 @@ var browserifyTask = function(devMode) {
 
 };
 
-gulp.task('browserify', function() {
+gulp.task('browserify', ['apply-prod-environment'], function() {
   return browserifyTask()
 });
 

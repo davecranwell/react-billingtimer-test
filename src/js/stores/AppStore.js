@@ -163,7 +163,6 @@ AppDispatcher.register(function(action) {
             break;
 
         case AppConstants.TASK_STOP:
-            console.log('hereeeee', action);
             update(action.id, {elapsed: action.elapsed, running: 0});
             AppStore.emitTaskChange();
 

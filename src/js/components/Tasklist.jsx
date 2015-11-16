@@ -1,4 +1,5 @@
 var React = require('react');
+var ReactDOM = require('react-dom');
 var Task = require('./Task.jsx');
 var AppActions = require('../actions/AppActions.js');
 
@@ -20,7 +21,7 @@ var Tasklist = React.createClass({
         var tasks = [];
 
         for (var task in allTasks) {
-            tasks.push(<li><Task key={task} onToggle={this.handlTaskToggle.bind(this, task)} task={allTasks[task]} /></li>);
+            tasks.push(<li key={task}><Task onToggle={this.handlTaskToggle.bind(this, task)} task={allTasks[task]} /></li>);
         }
 
         return (

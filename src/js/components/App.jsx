@@ -1,4 +1,5 @@
 var React = require('react');
+var ReactDOM = require('react-dom');
 var Tasklist = require('./Tasklist.jsx');
 var Timer = require('./Timer.jsx');
 var AppStore = require('../stores/AppStore');
@@ -27,13 +28,10 @@ var App = React.createClass({
 
     onAppChange: function(){
         this.setState(getAppState());
-        console.log(this.state.allTasks);
     },
 
     handleTimerToggle: function(elapsed){
-        console.log(elapsed);
         if(this.state.isTimerActive){
-            console.log('stopping...', this.state.activeTask.id, elapsed)
             AppActions.stop(this.state.activeTask.id, elapsed);
         } else {
             AppActions.create('New task');

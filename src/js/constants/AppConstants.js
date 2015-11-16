@@ -9,12 +9,10 @@
  * TodoConstants
  */
 
-var keyMirror = require('keymirror');
-
 module.exports = keyMirror({
-    TASK_CREATE: null,
-    TASK_START: null,
-    TASK_STOP: null,
-    TASK_DESTROY: null,
-    TASK_UPDATE_TEXT: null
+    TASK_CREATE: 'TASK_CREATE',
+    TASK_START: 'TASK_START',
+    TASK_STOP: 'TASK_STOP',
+    TASK_DESTROY: 'TASK_DESTROY',
+    TASK_UPDATE_TEXT: 'TASK_UPDATE_TEXT'
 });

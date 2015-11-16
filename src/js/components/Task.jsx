@@ -1,11 +1,11 @@
 var React = require('react');
-var AppStore = require('../stores/AppStore');
+var ReactDOM = require('react-dom');
 var TextInput = require('./TextInput.jsx');
 var AppActions = require('../actions/AppActions.js');
 
 var Task = React.createClass({
-    updateName: function(e){
-        AppActions.updateName(this.props.task.id, event.target.value);
+    updateName: function(text){
+        AppActions.updateName(this.props.task.id, text);
     },
 
     render: function() {

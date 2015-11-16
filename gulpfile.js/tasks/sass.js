@@ -6,10 +6,10 @@ var config       = require('../config').sass;
 
 
 gulp.task('sass', function () {
-  return gulp.src(config.src)
-    .pipe(sourcemaps.init())
-    .pipe(sass(config.settings))
-    .pipe(sourcemaps.write('./maps'))
-    .pipe(gulp.dest(config.dest))
-    .pipe(browserSync.reload({stream:true}));
+    return gulp.src(config.src)
+        .pipe(sourcemaps.init())
+        .pipe(sass(config.settings))
+        .pipe(sourcemaps.write('./maps'))
+        .pipe(gulp.dest(config.dest))
+        .pipe(browserSync.reload({stream:true}));
 });
