@@ -78,7 +78,6 @@ var AppStore = assign({}, EventEmitter.prototype, {
 
     getActiveTask: function(){
         for (var key in _tasks) {
-            console.log(_tasks[key])
             if(_tasks[key].running){
                 return _tasks[key];
             }

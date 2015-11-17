@@ -38,32 +38,29 @@ var App = React.createClass({
         if (this.state.activeTask) {
             AppActions.stop(this.state.activeTask.id, elapsed);
         } else {
-            console.log('creating a new task');
             AppActions.create('New task');
         }
     },
 
     handleTimerUpdate: function(elapsed) {
         this.activeTaskElapsed = elapsed;
-        console.log(elapsed);
     },
 
     handleTaskToggle: function(task) {
         if (this.state.activeTask && task !== this.state.activeTask) {
-            // If the task toggled isn't the running task, stop the running task,
-            // start the chosen one and reset the set internal elapsed clocked to
-            // that tasks's elapsed value
+            // If there is a running task but the task toggled isn't it, s
+            // stop the running task, and start the chosen one and reset 
+            // the set internal elapsed clocked
             AppActions.stop(this.state.activeTask.id, this.activeTaskElapsed);
             AppActions.start(task.id);
             this.activeTaskElapsed = task.elapsed;
-        } else if (task == this.state.activeTask) {
-            // If the task toggled IS the running task, stop it, recording time
-            // and reset internal active task clock
+        } else if (this.state.activeTask && task == this.state.activeTask) {
+            // If there's a running task which is the one clicked, stop it, 
+            // recording time and reset internal active task clock
             AppActions.stop(task.id, this.activeTaskElapsed);
             this.activeTaskElapsed = 0
         } else {
-            // If the clicked task was not running when clicked and no task
-            // was currently running, just start the task while setting
+            // If there is no running task, start the chosen task while setting
             // internal clock to task elapsed time
             AppActions.start(task.id);
             this.activeTaskElapsed = task.elapsed;
