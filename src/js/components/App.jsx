@@ -22,6 +22,7 @@ var App = React.createClass({
         AppStore.addTaskChangeListener(this.onAppChange);
 
         // Create an internal record of the Timer's elapsed time without affecting state
+        // This is dangerous and inconsistent
         this.activeTaskElapsed = 0;
     },
 
@@ -48,17 +49,24 @@ var App = React.createClass({
     },
 
     handleTaskToggle: function(task) {
-        // If the task toggled isn't the running task, stop the running task
         if (this.state.activeTask && task !== this.state.activeTask) {
-            console.log('clicked task is NOT active task')
+            // If the task toggled isn't the running task, stop the running task,
+            // start the chosen one and reset the set internal elapsed clocked to
+            // that tasks's elapsed value
             AppActions.stop(this.state.activeTask.id, this.activeTaskElapsed);
             AppActions.start(task.id);
+            this.activeTaskElapsed = task.elapsed;
         } else if (task == this.state.activeTask) {
-            console.log('clicked task IS active task')
+            // If the task toggled IS the running task, stop it, recording time
+            // and reset internal active task clock
             AppActions.stop(task.id, this.activeTaskElapsed);
+            this.activeTaskElapsed = 0
         } else {
-            console.log('clicked task was not running when clicked')
+            // If the clicked task was not running when clicked and no task
+            // was currently running, just start the task while setting
+            // internal clock to task elapsed time
             AppActions.start(task.id);
+            this.activeTaskElapsed = task.elapsed;
         }
     },
 
