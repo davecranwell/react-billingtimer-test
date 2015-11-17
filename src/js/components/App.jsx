@@ -7,8 +7,8 @@ var AppActions = require('../actions/AppActions.js');
 
 function getAppState() {
     return {
+        hasActiveTask: AppStore.hasActiveTask(),
         activeTask: AppStore.getActiveTask(),
-        isTimerActive: AppStore.isTimerActive(),
         allTasks: AppStore.getAllTasks()
     };
 }
@@ -31,18 +31,23 @@ var App = React.createClass({
     },
 
     handleTimerToggle: function(elapsed){
-        if(this.state.isTimerActive){
+        console.log('handleTimerToggle clicked', elapsed);
+
+        if(this.state.activeTask){
             AppActions.stop(this.state.activeTask.id, elapsed);
         } else {
+            console.log('creating a new task');
             AppActions.create('New task');
         }
     },
 
     render: function() {
+        console.log('App has active task', this.state.hasActiveTask);
+
         return (
             <div>
                 <Tasklist allTasks={this.state.allTasks} />
-                <Timer onToggle={this.handleTimerToggle} active={this.state.isTimerActive} />
+                <Timer onToggle={this.handleTimerToggle} active={this.state.hasActiveTask} />
             </div>
         )
     }

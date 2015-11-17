@@ -2,47 +2,71 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var SecondsTohhmmss = require('../lib/SecondsTohhmmss');
 
-var Stopwatch = React.createClass({
+var Timer = React.createClass({
     getInitialState: function(){
         return { 
-            elapsed: 0
+            elapsed: 0,
+            active: false
         };
     },
 
     componentDidMount: function() {
-        this._tick();
+        if (this.props.active) {
+            this.setState({
+                active: true
+            });
+
+            this._tick();   
+        }            
     },
 
     componentWillUnmount: function() {
         clearInterval(this.interval);
     },
 
-    _tick: function() {
-        var self = this;
+    componentWillReceiveProps: function(newProps) {
+        console.log('receiving props', newProps);
+        
+        clearInterval(this.interval);
 
-        this.interval = setInterval(function() {
-            if (!self.props.active) {
-                self.interval = undefined;
-                return;
-            }
-            
-            self.setState({elapsed: self.state.elapsed + 1});
-        }, 1000);
+        console.log(newProps.active);
+
+        this.setState({
+            elapsed: 0,
+            active: newProps.active
+        });
+
+        this._tick();
     },
 
-    onToggle: function(){
+    _tick: function() {
+        console.log(this.state.active);
+        if (this.state.active) {
+            this.interval = setInterval(function() {                
+                this.setState({elapsed: this.state.elapsed + 1});
+            }.bind(this), 1000);
+        }
+    },
+
+    handleClick: function(){
         this.props.onToggle(this.state.elapsed);
     },
 
     render: function() {
-        var time = SecondsTohhmmss(this.state.elapsed);
+        var buttonVal;
+
+        if (this.state.active) {
+            buttonVal = SecondsTohhmmss(this.state.elapsed);
+        } else { 
+            buttonVal = "Start";
+        }
 
         return (
             <div className="timer-wrapper">
-                <button onClick={this.onToggle}>{time}</button>
+                <button onClick={this.handleClick}>{buttonVal}</button>
             </div>
         )
     }
 });
 
-module.exports = Stopwatch;
+module.exports = Timer;

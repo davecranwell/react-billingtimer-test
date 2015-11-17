@@ -9,10 +9,10 @@
  * TodoConstants
  */
 
-module.exports = keyMirror({
+module.exports = {
     TASK_CREATE: 'TASK_CREATE',
     TASK_START: 'TASK_START',
     TASK_STOP: 'TASK_STOP',
     TASK_DESTROY: 'TASK_DESTROY',
     TASK_UPDATE_TEXT: 'TASK_UPDATE_TEXT'
-});
+};

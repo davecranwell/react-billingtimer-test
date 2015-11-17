@@ -21,19 +21,15 @@ var browserifyTask = function(devMode) {
 
   var browserifyThis = function(bundleConfig) {
 
-    console.log(devMode);
-
     if(devMode) {
       // Add watchify args and debug (sourcemaps) option
-      _.extend(bundleConfig, watchify.args, { debug: true });
+      _.extend(bundleConfig, { debug: true });
     }
 
-    var b = browserify(bundleConfig);
+    var bundler = browserify(bundleConfig);
 
-    var bundle = function() {
-      console.log(bundleConfig);
-      return b
-        .bundle()
+    var runBundle = function() {
+      return bundler.bundle()
         // Report compile errors
         // Use vinyl-source-stream to make the
         // stream gulp compatible. Specify the
@@ -46,22 +42,21 @@ var browserifyTask = function(devMode) {
 
     if(devMode) {
       // Wrap with watchify and rebundle on changes
-      b = watchify(b);
+      bundler = watchify(bundler);
       // Rebundle on update
-      b.on('update', bundle);
+      bundler.on('update', runBundle);
     } else {
-
-      b.plugin('minifyify', {map: false, uglify: true});
+      // bundler.plugin('minifyify', {map: false, uglify: true});
 
       // Sort out shared dependencies.
       // b.require exposes modules externally
-      if(bundleConfig.require) b.require(bundleConfig.require);
+      // if(bundleConfig.require) bundler.require(bundleConfig.require);
       // b.external excludes modules from the bundle, and expects
       // they'll be available externally
-      if(bundleConfig.external) b.external(bundleConfig.external);
+      // if(bundleConfig.external) bundler.external(bundleConfig.external);
     }
 
-    return bundle();
+    return runBundle();
   };
 
   // Start bundling with Browserify for each bundleConfig specified
@@ -69,9 +64,9 @@ var browserifyTask = function(devMode) {
 
 };
 
-gulp.task('browserify', ['apply-prod-environment'], function() {
-  return browserifyTask()
-});
+// gulp.task('browserify', ['apply-prod-environment'], function() {
+//   return browserifyTask()
+// });
 
 // Exporting the task so we can call it directly in our watch task, with the 'devMode' option
 module.exports = browserifyTask;
