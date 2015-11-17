@@ -17,6 +17,7 @@
     "gulp-imagemin": "^2.3.0",
     "gulp-sass": "^2.0.4",
     "gulp-sourcemaps": "^1.6.0",
+    "gulp-util": "^3.0.7",
     "lodash": "^3.10.1",
     "merge-stream": "^1.0.0",
     "minifyify": "^7.1.0",

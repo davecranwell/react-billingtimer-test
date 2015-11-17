@@ -47,7 +47,7 @@ var App = React.createClass({
         return (
             <div>
                 <Tasklist allTasks={this.state.allTasks} />
-                <Timer onToggle={this.handleTimerToggle} active={this.state.hasActiveTask} />
+                <Timer onToggle={this.handleTimerToggle} active={this.state.hasActiveTask} elapsed={this.state.activeTask && this.state.activeTask.elapsed} />
             </div>
         )
     }

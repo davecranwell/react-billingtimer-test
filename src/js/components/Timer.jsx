@@ -3,10 +3,25 @@ var ReactDOM = require('react-dom');
 var SecondsTohhmmss = require('../lib/SecondsTohhmmss');
 
 var Timer = React.createClass({
+    propTypes: {
+        onToggle: React.PropTypes.func,
+        active: React.PropTypes.bool,
+        elapsed: React.PropTypes.number
+    },
+
+    getDefaultProps: function() {
+        return {
+            onToggle: function(){},
+            active: false,
+            elapsed: 0
+        };
+    },
+
     getInitialState: function(){
-        return { 
-            elapsed: 0,
-            active: false
+        return {
+            onToggle: this.props.onToggle,
+            active: this.props.active,
+            elapsed: this.props.elapsed  
         };
     },
 
@@ -15,37 +30,41 @@ var Timer = React.createClass({
             this.setState({
                 active: true
             });
+        }     
+    },
 
-            this._tick();   
-        }            
+    componentWillMount: function() {
+        this.interval = null;
     },
 
     componentWillUnmount: function() {
-        clearInterval(this.interval);
+        this._stop();
     },
 
-    componentWillReceiveProps: function(newProps) {
-        console.log('receiving props', newProps);
-        
-        clearInterval(this.interval);
+    componentWillReceiveProps: function(newProps) {       
+        this._start();
 
-        console.log(newProps.active);
+        console.log(newProps);
 
         this.setState({
-            elapsed: 0,
+            elapsed: newProps.elapsed,
             active: newProps.active
         });
-
-        this._tick();
     },
 
-    _tick: function() {
-        console.log(this.state.active);
-        if (this.state.active) {
-            this.interval = setInterval(function() {                
-                this.setState({elapsed: this.state.elapsed + 1});
-            }.bind(this), 1000);
-        }
+    _callback: function() {
+        this.setState({elapsed: this.state.elapsed + 1});
+        this._start();
+    },
+
+    _start: function() {
+        this._stop();
+
+        this.interval = setTimeout(this._callback, 1000)
+    },
+
+    _stop: function() {
+        clearTimeout(this.interval);
     },
 
     handleClick: function(){
@@ -56,8 +75,10 @@ var Timer = React.createClass({
         var buttonVal;
 
         if (this.state.active) {
+            this._start();
             buttonVal = SecondsTohhmmss(this.state.elapsed);
-        } else { 
+        } else {
+            this._stop();
             buttonVal = "Start";
         }
 

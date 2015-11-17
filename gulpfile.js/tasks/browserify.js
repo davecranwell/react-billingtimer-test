@@ -16,6 +16,7 @@ var gulp         = require('gulp');
 var source       = require('vinyl-source-stream');
 var config       = require('../config').browserify;
 var _            = require('lodash');
+var gutil        = require('gulp-util');
 
 var browserifyTask = function(devMode) {
 
@@ -31,13 +32,17 @@ var browserifyTask = function(devMode) {
     var runBundle = function() {
       return bundler.bundle()
         // Report compile errors
+        .on("error", function(err) {
+          gutil.log("Browserify error:", err);
+          this.emit('end');
+        })
         // Use vinyl-source-stream to make the
         // stream gulp compatible. Specify the
         // desired output filename here.
         .pipe(source(bundleConfig.outputName))
         // Specify the output destination
         .pipe(gulp.dest(bundleConfig.dest))
-        .pipe(browserSync.reload({stream: true}));
+        .pipe(browserSync.reload({stream: true}))
     };
 
     if(devMode) {
