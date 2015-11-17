@@ -4,12 +4,20 @@ var Task = require('./Task.jsx');
 var AppActions = require('../actions/AppActions.js');
 
 var Tasklist = React.createClass({
-    handlTaskToggle: function(task){
-        if(task.running){
-            AppActions.stop(task);
-        }else{
-            AppActions.start(task);
-        }
+    propTypes: {
+        allTasks: React.PropTypes.array,
+        onToggle: React.PropTypes.func
+    },
+
+    getDefaultProps: function() {
+        return {
+            allTasks: [],
+            onToggle: function(){}
+        };
+    },
+
+    handleTaskToggle: function(task){
+        this.props.onToggle(task);
     },
 
     render: function() {
@@ -21,7 +29,7 @@ var Tasklist = React.createClass({
         var tasks = [];
 
         for (var task in allTasks) {
-            tasks.push(<li key={task}><Task onToggle={this.handlTaskToggle.bind(this, task)} task={allTasks[task]} /></li>);
+            tasks.push(<li key={task}><Task onToggle={this.handleTaskToggle.bind(this, allTasks[task])} task={allTasks[task]} /></li>);
         }
 
         return (

@@ -5,6 +5,7 @@ var SecondsTohhmmss = require('../lib/SecondsTohhmmss');
 var Timer = React.createClass({
     propTypes: {
         onToggle: React.PropTypes.func,
+        onUpdate: React.PropTypes.func,
         active: React.PropTypes.bool,
         elapsed: React.PropTypes.number
     },
@@ -12,6 +13,7 @@ var Timer = React.createClass({
     getDefaultProps: function() {
         return {
             onToggle: function(){},
+            onUpdate: function(){},
             active: false,
             elapsed: 0
         };
@@ -41,10 +43,8 @@ var Timer = React.createClass({
         this._stop();
     },
 
-    componentWillReceiveProps: function(newProps) {       
+    componentWillReceiveProps: function(newProps) {    
         this._start();
-
-        console.log(newProps);
 
         this.setState({
             elapsed: newProps.elapsed,
@@ -53,7 +53,10 @@ var Timer = React.createClass({
     },
 
     _callback: function() {
-        this.setState({elapsed: this.state.elapsed + 1});
+        var newElapsed = this.state.elapsed + 1;
+
+        this.setState({elapsed: newElapsed});
+        this.props.onUpdate(newElapsed);
         this._start();
     },
 

@@ -17,7 +17,7 @@ var assign = require('object-assign');
 var CHANGE_EVENT = 'change';
 var START_EVENT = 'start';
 
-var _tasks = {};
+var _tasks = [];
 var _timerStart = null;
 
 
@@ -30,7 +30,7 @@ var _timerStart = null;
 function stopAll(){
     // Stop any currently running task
     for (var key in _tasks) {
-        _tasks[key] = assign({}, _tasks[key], {running:0});
+        _tasks[key] = assign({}, _tasks[key], {running: 0});
     };
 }
 
