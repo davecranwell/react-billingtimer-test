@@ -4,9 +4,10 @@
   "private": true,
   "dependencies": {
     "flux": "^2.1.1",
+    "object-assign": "^4.0.1",
     "react": "^0.14.0",
-    "react-dom": "^0.14.0",
-    "object-assign": "^4.0.1"
+    "react-addons-pure-render-mixin": "^0.14.2",
+    "react-dom": "^0.14.0"
   },
   "devDependencies": {
     "browser-sync": "^2.9.11",

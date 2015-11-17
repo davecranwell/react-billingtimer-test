@@ -1,11 +1,17 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var TextInput = require('./TextInput.jsx');
+var TimeInSeconds = require('./TimeInSeconds.jsx');
 var AppActions = require('../actions/AppActions.js');
+
 
 var Task = React.createClass({
     updateName: function(text){
         AppActions.updateName(this.props.task.id, text);
+    },
+
+    shouldComponentUpdate: function(newProps, newState) {
+        return this.props.task !== newProps.task;
     },
 
     render: function() {
@@ -15,7 +21,7 @@ var Task = React.createClass({
                 <div onClick={this.props.onToggle}>
                     <div>id: {this.props.task.id}</div>
                     <div>text: {this.props.task.text}</div>
-                    <div>elapsed: {this.props.task.elapsed}</div>
+                    <div>elapsed: <TimeInSeconds seconds={this.props.task.elapsed} /></div>
                     <div>running: {this.props.task.running}</div>
                 </div>
                 <button onClick={this.destroy}>Delete</button>

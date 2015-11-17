@@ -1,6 +1,6 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-var SecondsTohhmmss = require('../lib/SecondsTohhmmss');
+var TimeInSeconds = require('./TimeInSeconds.jsx');
 
 var Timer = React.createClass({
     propTypes: {
@@ -79,7 +79,7 @@ var Timer = React.createClass({
 
         if (this.state.active) {
             this._start();
-            buttonVal = SecondsTohhmmss(this.state.elapsed);
+            buttonVal = <TimeInSeconds seconds={this.state.elapsed} />
         } else {
             this._stop();
             buttonVal = "Start";
