@@ -46,9 +46,7 @@ var App = React.createClass({
     },
 
     handleTimerUpdate: function() {
-        this.setState({
-            activeTaskElapsed: this.state.activeTaskElapsed + 1
-        });
+        AppActions.updateTime(this.state.activeTask.id, (this.state.activeTaskElapsed + 1));
     },
 
     handleTaskToggle: function(task) {

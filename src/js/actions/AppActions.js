@@ -57,6 +57,14 @@ var AppActions = {
         });
     },
 
+    updateTime: function(id, elapsed){
+        AppDispatcher.dispatch({
+            actionType: AppConstants.TASK_UPDATE_TIME,
+            id: id,
+            elapsed: elapsed
+        });
+    },
+
     /**
      * @param  {string} id
      */

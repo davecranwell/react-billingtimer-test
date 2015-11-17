@@ -178,6 +178,14 @@ AppDispatcher.register(function(action) {
 
             break;
 
+        case AppConstants.TASK_UPDATE_TIME:
+            elapsed = action.elapsed;
+
+            update(action.id, {elapsed: elapsed});
+            AppStore.emitTaskChange();
+
+            break;
+
         case AppConstants.TASK_DESTROY:
             destroy(action.id);
             AppStore.emitTaskChange();
