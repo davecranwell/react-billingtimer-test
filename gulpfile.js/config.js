@@ -32,7 +32,10 @@ module.exports = {
             entries: src + '/js/main.jsx',
             transform: [reactify],
             dest: dest,
-            outputName: 'app.js'
+            outputName: 'app.js',
+            cache: {}, 
+            packageCache: {},
+            fullPaths: true
         }]
     },
 };
