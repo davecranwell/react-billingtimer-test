@@ -1,7 +1,7 @@
 var React = require('react');
-var ReactDOM = require('react-dom');
 var TextInput = require('./TextInput.jsx');
 var TimeInSeconds = require('./TimeInSeconds.jsx');
+var MouseWheel = require('./MouseWheel.jsx');
 var AppActions = require('../actions/AppActions.js');
 
 
@@ -14,6 +14,16 @@ var Task = React.createClass({
         return this.props.task !== newProps.task;
     },
 
+    handleMouseUp: function() {
+        AppActions.incrementTimeByMinute(this.props.task.id);
+        console.log('up');
+    },
+
+    handleMouseDown: function(){
+        AppActions.decrementTimeByMinute(this.props.task.id);
+        console.log('down');
+    },
+
     render: function() {
         return (
             <div>
@@ -21,7 +31,7 @@ var Task = React.createClass({
                 <div onClick={this.props.onToggle}>
                     <div>id: {this.props.task.id}</div>
                     <div>text: {this.props.task.text}</div>
-                    <div>elapsed: <TimeInSeconds seconds={this.props.task.elapsed} /></div>
+                    <div>elapsed: <MouseWheel upCallback={this.handleMouseUp} downCallback={this.handleMouseDown}><TimeInSeconds seconds={this.props.task.elapsed} /></MouseWheel></div>
                     <div>running: {this.props.task.running}</div>
                 </div>
                 <button onClick={this.destroy}>Delete</button>

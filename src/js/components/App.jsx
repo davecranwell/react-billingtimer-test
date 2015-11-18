@@ -1,5 +1,4 @@
 var React = require('react');
-var ReactDOM = require('react-dom');
 var Tasklist = require('./Tasklist.jsx');
 var TimeInSeconds = require('./TimeInSeconds.jsx');
 var Interval = require('./Interval.jsx');

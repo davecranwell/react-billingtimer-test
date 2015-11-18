@@ -1,5 +1,4 @@
 var React = require('react');
-var ReactDOM = require('react-dom');
 var Task = require('./Task.jsx');
 var AppActions = require('../actions/AppActions.js');
 

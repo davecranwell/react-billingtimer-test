@@ -1,5 +1,4 @@
 var React = require('react');
-var ReactDOM = require('react-dom');
 var TimeInSeconds = require('./TimeInSeconds.jsx');
 
 var Timer = React.createClass({
